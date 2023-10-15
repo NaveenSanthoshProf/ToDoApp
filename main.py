@@ -1,11 +1,11 @@
 import dataconn
 import display
 
-
-
-def main(string):
-    print ("HELLO {}!!".format(string))
-
+class App(object):
+    def run(self,string):
+        print ("HELLO {}!!".format(string))
+        #dataconn.DBConnection.dbstatus(self)
+        dataconn()
 
 if __name__ == "__main__" :
-    main(string="random")
+    App().run(string="random")
