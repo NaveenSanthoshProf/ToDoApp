@@ -1,29 +1,35 @@
 import os 
 
-import mysql.connector
-from mysql.connector import Error
+import pymysql
 
 
-try:
-    connection = mysql.connector.connect(host='localhost',
-                                         database='mysql',
-                                         user='root',
-                                         password='031068')
-    if connection.is_connected():
-        db_Info = connection.get_server_info()
-        print("Connected to MySQL Server version ", db_Info)
-        cursor = connection.cursor()
-        cursor.execute("select database();")
-        record = cursor.fetchone()
-        print("You're connected to database: ", record)
+class MySQLConnector:
 
-except Error as e:
-    print("Error while connecting to MySQL", e)
-finally:
-    if connection.is_connected():
-        cursor.close()
-        connection.close()
-        print("MySQL connection is closed")
+    def __init__(self, host, username, password, database):
+        self.host = host
+        self.username = username
+        self.password = password
+        self.database = database
+        self.connection = None
+
+    def connect(self):
+        try:
+            self.connection = pymysql.connect(
+                host=self.host,
+                user=self.username,
+                password=self.password,
+                database=self.database
+            )
+
+            info = self.connection.get_host_info
+            print("Connected to the MySQL server {} ".format(info) )
+
+        except pymysql.Error as err:
+            print(f"Error: {err}")
+
+    def close(self):
+            self.connection.close()
+            print("MySQL connection is closed")
 
 
 
@@ -34,26 +40,7 @@ finally:
 
 
 
-#class DBConnection:
-#    def __init__(self):
-#        #self.password = os.getenv("PASSWORD")
-#        self.mydb = mysql.connector.connect(
-#            host="localhost",
-#            user="root",
-#            passwd="031068",
-#            database="mysql"
-#        )
-#        self.cur = self.mydb.cursor()
-#
-#    def __enter__(self):
-#        return self
-#    
-#    def __exit__(self,exc_type, exc_val, exc_tb):
-#        self.mydb.connection.close()
-#
-#    def dbstatus(self):
-#        print("Connecting to the database...")
-#        self.mydb.isconnected() 
+
 
 
     
