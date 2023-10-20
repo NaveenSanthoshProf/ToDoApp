@@ -25,6 +25,17 @@ class MySQLConnector:
         
         return self.connection
 
+    def modifydb(self,sqlCon,query):
+         cursor = sqlCon.cursor()
+         cursor.execute(query)
+         print("data updated")
+    
+    def readdb(self,sqlCon,query):
+         cursor = sqlCon.cursor()
+         cursor.execute(query)
+         updatedRow = cursor.fetchall()
+         for column in updatedRow:
+            print(column)   
 
     def close(self):
             self.connection.close()
