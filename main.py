@@ -1,4 +1,4 @@
-import display
+from display import ApplicationUI
 from dataconn import MySQLConnector
 
 class MainApplication:
@@ -16,10 +16,16 @@ class MainApplication:
             )
             self.mysql_connector.connect()
 
+            ApplicationUI(sqlCon=self.mysql_connector.connect())
             # Your main application logic goes here
 
+
+
         finally:
-            pass
+            print("debug")
+            print(self.mysql_connector.connect())
+
+            pass 
         
         #    if self.mysql_connector:
         #        self.mysql_connector.close()

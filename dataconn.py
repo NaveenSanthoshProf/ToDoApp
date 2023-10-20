@@ -20,12 +20,11 @@ class MySQLConnector:
                 password=self.password,
                 database=self.database
             )
-
-            info = self.connection.get_host_info
-            print("Connected to the MySQL server {} ".format(info) )
-
         except pymysql.Error as err:
             print(f"Error: {err}")
+        
+        return self.connection
+
 
     def close(self):
             self.connection.close()
