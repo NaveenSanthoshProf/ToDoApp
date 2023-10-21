@@ -1,5 +1,9 @@
 import customtkinter
 import tkinter
+
+
+from process import DailyTasks
+
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
@@ -16,23 +20,23 @@ class ApplicationUI(customtkinter.CTk):
 
         self.sidebar_frame = customtkinter.CTkFrame(self, width=200, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=5, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(6, weight=1)
+        self.sidebar_frame.grid_rowconfigure(7, weight=1)
         
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=75, pady=(20, 10))
 
-        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame,text="Daily Tasks" , command=lambda: self.dailytask())
+        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame,text="Daily Tasks" , command=lambda: self.dailytask(sqlCon))
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
         self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame,text="Work ToDo" , command=lambda: self.WorkTodo())
         self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
         self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Week Planner" , command=lambda: self.weeklyplan())
         self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=10)
-        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Habit Tracker" , command=lambda: self.habittrack())
-        self.sidebar_button_3.grid(row=4, column=0, padx=20, pady=10)
-        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Side Hustle" , command=lambda: self.sidehustle())
-        self.sidebar_button_3.grid(row=5, column=0, padx=20, pady=10)
-        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Journal " , command=lambda: self.journal())
-        self.sidebar_button_3.grid(row=5, column=0, padx=20, pady=10)
+        self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame,text="Habit Tracker" , command=lambda: self.habittrack())
+        self.sidebar_button_4.grid(row=4, column=0, padx=20, pady=10)
+        self.sidebar_button_5 = customtkinter.CTkButton(self.sidebar_frame,text="Side Hustle" , command=lambda: self.sidehustle())
+        self.sidebar_button_5.grid(row=5, column=0, padx=20, pady=10)
+        self.sidebar_button_6 = customtkinter.CTkButton(self.sidebar_frame,text="Journal " , command=lambda: self.journal())
+        self.sidebar_button_6.grid(row=6, column=0, padx=20, pady=10)
 
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
         self.scaling_label.grid(row=7, column=0, padx=20, pady=(10, 0))
@@ -40,31 +44,35 @@ class ApplicationUI(customtkinter.CTk):
                                                                command=self.change_scaling_event)
         self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
 
-       
+
         
 
 
-        #self.button = customtkinter.CTkButton(master = self, text ="Button",  command=lambda: self.buttonFn(sqlCon) )
-        #self.button.place(relx=0.5,rely=0.5,anchor=customtkinter.CENTER) 
-        #self.button_Data = customtkinter.CTkButton(master = self, text ="Seedata",  command=lambda: self.fetchdata(sqlCon) )
-        #self.button_Data.place(relx=0.8,rely=0.8,anchor=customtkinter.CENTER) 
+       
         self.mainloop()
 
-    def buttonFn (self,sqlCon):
+    def buttonFn (self):
         print("Button clicked")
 
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
         customtkinter.set_widget_scaling(new_scaling_float)
         
-    def dailytask(self):
+    def dailytask(self,sqlCon):
         self.dailytask_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
         self.dailytask_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
         self.dailytask_frame.grid_rowconfigure(4, weight=1)
-        self.entry = customtkinter.CTkEntry(self.dailytask_frame, placeholder_text="Add Task", width=500)
-        self.entry.grid(row=1, column=2, columnspan=4, padx=(20, 0),pady=(20, 20), sticky="nsew")
-        self.main_button_1 = customtkinter.CTkButton(master=self.dailytask_frame,text="Add", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"))
+
+        
+        self.main_button_1 = customtkinter.CTkButton(master=self.dailytask_frame,text="Add", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"),command=lambda:(self.addTaskwindow(sqlCon)))
         self.main_button_1.grid(row=1, column=7, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        
+        dailyTasks=DailyTasks.getTasks(self,sqlCon)
+
+        for i in range(len(dailyTasks)):
+            self.checkbox_1 = customtkinter.CTkCheckBox(master=self.WorkTodo_frame, text=habits[i])
+            self.checkbox_1.grid(row=i, column=0, pady=(20, 0), padx=20, sticky="nsew")
+
         try:
             self.journal_frame.destroy()
             self.WorkTodo_frame.destroy()
@@ -92,7 +100,15 @@ class ApplicationUI(customtkinter.CTk):
     def WorkTodo(self):
         self.WorkTodo_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
         self.WorkTodo_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
-        self.WorkTodo_frame.grid_rowconfigure(4, weight=1)
+        habits = ["habit a", "habit b", "habit c", "habit d", "habit a", "habit b", "habit c", "habit d" ,"habit a", "habit b", "habit c", "habit d" ]
+        
+        for i in range(len(habits)):
+            self.checkbox_1 = customtkinter.CTkCheckBox(master=self.WorkTodo_frame, text=habits[i])
+            self.checkbox_1.grid(row=i, column=0, pady=(20, 0), padx=20, sticky="nsew")
+        
+        self.update_button = customtkinter.CTkButton(master=self.WorkTodo_frame,text="update", command=lambda: self.WorkTodo())
+        self.update_button.grid(row=0, column=3, padx=20, pady=(20, 0), sticky="nsew")
+
         try:
             self.journal_frame.destroy()
             self.dailytask_frame.destroy()
@@ -120,6 +136,12 @@ class ApplicationUI(customtkinter.CTk):
         self.habittrack_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
         self.habittrack_frame.grid_rowconfigure(100, weight=1)
         habits = ["habit a", "habit b", "habit c", "habit d", "habit a", "habit b", "habit c", "habit d" ,"habit a", "habit b", "habit c", "habit d" ]
+        self.scrollable_frame_switches = []
+        for i in range(len(habits)):
+            switch = customtkinter.CTkSwitch(master=self.habittrack_frame, text=habits[i])
+            switch.grid(row=i+(len(habits)+3), column=0, padx=10, pady=(0, 20))
+            self.scrollable_frame_switches.append(switch)
+        
         for i in range(len(habits)) :
             self.habit_label = customtkinter.CTkLabel(self.habittrack_frame, text=habits[i], font=customtkinter.CTkFont(size=20, weight="bold"))
             self.habit_label.grid(row=i, column=0, pady=(10, 10))
@@ -144,6 +166,7 @@ class ApplicationUI(customtkinter.CTk):
         self.sidehustle_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
         self.sidehustle_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
         self.sidehustle_frame.grid_rowconfigure(4, weight=1)
+
         try:
             self.journal_frame.destroy()
             self.dailytask_frame.destroy()
@@ -153,3 +176,34 @@ class ApplicationUI(customtkinter.CTk):
         except:
             print("Log?")        
         
+
+    def addTaskwindow(self,sqlCon):
+        print("addtaskwindow")
+        self.addtask_frame = customtkinter.CTkFrame(self, width=400, corner_radius=0)
+        self.addtask_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
+        self.addtask_frame.grid_rowconfigure(4, weight=1)
+        
+        self.entry = customtkinter.CTkEntry(self.addtask_frame, placeholder_text="Add Task", width=500)
+        self.entry.grid(row=1, column=0, columnspan=4, padx=(20, 0),pady=(20, 20), sticky="nsew")
+
+        self.entry_quantity= customtkinter.CTkEntry(self.addtask_frame, placeholder_text="quantity", width=500)
+        self.entry_quantity.grid(row=2, column=0, columnspan=4, padx=(20, 0),  sticky="nsew")
+
+        self.dailyswitch = customtkinter.CTkSwitch(master=self.addtask_frame, text="isdaily")
+        self.dailyswitch.grid(row=3, column=0, padx=0, pady=(20, 20))
+
+        self.addtask_button_1 = customtkinter.CTkButton(self.addtask_frame,text="Update" , command=lambda:(self.getdata(sqlCon)))
+        self.addtask_button_1.grid(row=1, column=5, padx=20, pady=10)
+        
+
+
+        try: 
+            self.dailytask_frame.destroy()
+        except:
+            print("log?")
+
+    def getdata(self,sqlCon):
+        quantity = self.entry_quantity.get()
+        taskname = self.entry.get()
+        isdaily = self.dailyswitch.get()
+        DailyTasks.addTasks(self,sqlCon,taskname,quantity,isdaily)
