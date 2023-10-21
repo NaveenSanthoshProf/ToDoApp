@@ -1,5 +1,5 @@
 import customtkinter
-
+import tkinter
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
@@ -11,7 +11,7 @@ class ApplicationUI(customtkinter.CTk):
         self.title("To-Do Application")
 
         self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure((2, 3), weight=0)
+        self.grid_columnconfigure(2, weight=4)
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
         self.sidebar_frame = customtkinter.CTkFrame(self, width=200, corner_radius=0)
@@ -23,13 +23,13 @@ class ApplicationUI(customtkinter.CTk):
 
         self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame,text="Daily Tasks" , command=lambda: self.dailytask())
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
-        self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame,text="Deloitte ToDo" , command=lambda: self.buttonFn(sqlCon))
+        self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame,text="Work ToDo" , command=lambda: self.WorkTodo())
         self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
-        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Week Planner" , command=lambda: self.buttonFn(sqlCon))
+        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Week Planner" , command=lambda: self.weeklyplan())
         self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=10)
-        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Habit Tracker" , command=lambda: self.buttonFn(sqlCon))
+        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Habit Tracker" , command=lambda: self.habittrack())
         self.sidebar_button_3.grid(row=4, column=0, padx=20, pady=10)
-        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Side Hustle" , command=lambda: self.buttonFn(sqlCon))
+        self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Side Hustle" , command=lambda: self.sidehustle())
         self.sidebar_button_3.grid(row=5, column=0, padx=20, pady=10)
         self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame,text="Journal " , command=lambda: self.journal())
         self.sidebar_button_3.grid(row=5, column=0, padx=20, pady=10)
@@ -58,14 +58,98 @@ class ApplicationUI(customtkinter.CTk):
         customtkinter.set_widget_scaling(new_scaling_float)
         
     def dailytask(self):
-        self.entry = customtkinter.CTkEntry(self, placeholder_text="Add Task")
-        self.entry.grid(row=3, column=1, columnspan=2, padx=(20, 0), pady=(20, 20), sticky="nsew")
-        self.main_button_1 = customtkinter.CTkButton(master=self,text="Add", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"))
-        self.main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
-        self.textbox.destroy()
+        self.dailytask_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
+        self.dailytask_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
+        self.dailytask_frame.grid_rowconfigure(4, weight=1)
+        self.entry = customtkinter.CTkEntry(self.dailytask_frame, placeholder_text="Add Task", width=500)
+        self.entry.grid(row=1, column=2, columnspan=4, padx=(20, 0),pady=(20, 20), sticky="nsew")
+        self.main_button_1 = customtkinter.CTkButton(master=self.dailytask_frame,text="Add", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"))
+        self.main_button_1.grid(row=1, column=7, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        try:
+            self.journal_frame.destroy()
+            self.WorkTodo_frame.destroy()
+            self.weeklyplan_frame.destroy()
+            self.habittrack_frame.destroy()
+            self.sidehustle_frame.destroy()
+        except:
+            print("Log?")
 
     def journal(self):
-        self.entry.destroy()
-        self.main_button_1.destroy()
-        self.textbox = customtkinter.CTkTextbox(self, width=250)
+        self.journal_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
+        self.journal_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
+        self.journal_frame.grid_rowconfigure(4, weight=1)
+        self.textbox = customtkinter.CTkTextbox(self.journal_frame, width=750, height=750)
         self.textbox.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        try:
+            self.dailytask_frame.destroy()
+            self.WorkTodo_frame.destroy()
+            self.weeklyplan_frame.destroy()
+            self.habittrack_frame.destroy()
+            self.sidehustle_frame.destroy()
+        except:
+            print("Log?")
+    
+    def WorkTodo(self):
+        self.WorkTodo_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
+        self.WorkTodo_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
+        self.WorkTodo_frame.grid_rowconfigure(4, weight=1)
+        try:
+            self.journal_frame.destroy()
+            self.dailytask_frame.destroy()
+            self.weeklyplan_frame.destroy()
+            self.habittrack_frame.destroy()
+            self.sidehustle_frame.destroy()
+        except:
+            print("Log?")        
+
+    def weeklyplan(self):
+        self.weeklyplan_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
+        self.weeklyplan_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
+        self.weeklyplan_frame.grid_rowconfigure(4, weight=1)
+        try:
+            self.journal_frame.destroy()
+            self.dailytask_frame.destroy()
+            self.WorkTodo_frame.destroy()
+            self.habittrack_frame.destroy()
+            self.sidehustle_frame.destroy()
+        except:
+            print("Log?")        
+
+    def habittrack(self):
+        self.habittrack_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
+        self.habittrack_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
+        self.habittrack_frame.grid_rowconfigure(100, weight=1)
+        habits = ["habit a", "habit b", "habit c", "habit d", "habit a", "habit b", "habit c", "habit d" ,"habit a", "habit b", "habit c", "habit d" ]
+        for i in range(len(habits)) :
+            self.habit_label = customtkinter.CTkLabel(self.habittrack_frame, text=habits[i], font=customtkinter.CTkFont(size=20, weight="bold"))
+            self.habit_label.grid(row=i, column=0, pady=(10, 10))
+            self.progressbar_1 = customtkinter.CTkProgressBar(self.habittrack_frame)
+            self.progressbar_1.grid(row=i, column=2, padx=(20, 10), pady=(10, 10), sticky="nsew")
+            self.habit_label = customtkinter.CTkLabel(self.habittrack_frame, text="num/100", font=customtkinter.CTkFont(size=7))
+            self.habit_label.grid(row=i, column=3, pady=(10, 10))
+            #self.progressbar_1.set(0.2)
+        
+        #self.progressbar_2 = customtkinter.CTkProgressBar(self.habittrack_frame)
+        #self.progressbar_2.grid(row=2, column=0, padx=(20, 10), pady=(10, 10), sticky="ew")
+        try:
+            self.journal_frame.destroy()
+            self.dailytask_frame.destroy()
+            self.WorkTodo_frame.destroy()
+            self.weeklyplan_frame.destroy()
+            self.sidehustle_frame.destroy()
+        except:
+            print("Log?")        
+
+    def sidehustle(self):
+        self.sidehustle_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
+        self.sidehustle_frame.grid(row=0, column=1, rowspan=4, columnspan = 3 ,padx=(10, 0), sticky="nsew")
+        self.sidehustle_frame.grid_rowconfigure(4, weight=1)
+        try:
+            self.journal_frame.destroy()
+            self.dailytask_frame.destroy()
+            self.WorkTodo_frame.destroy()
+            self.weeklyplan_frame.destroy()
+            self.habittrack_frame.destroy()
+        except:
+            print("Log?")        
+        
