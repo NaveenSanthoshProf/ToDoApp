@@ -30,6 +30,14 @@ class MySQLConnector:
          print("data updated")
          sqlCon.commit()
     
+    def modifymanydb(self,sqlCon,query,data):
+         cursor = sqlCon.cursor()
+         cursor.executemany(query,data)
+         print("data updated")
+         sqlCon.commit()
+
+
+
     def readdb(self,sqlCon,query):
          cursor = sqlCon.cursor()
          cursor.execute(query)
