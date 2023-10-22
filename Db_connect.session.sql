@@ -1,1 +1,1 @@
-SHOW databases;
+SELECT * FROM DailyTasks

@@ -1,7 +1,6 @@
 import os 
-
 import pymysql
-
+from icecream import ic
 
 class MySQLConnector:
 
@@ -29,13 +28,18 @@ class MySQLConnector:
          cursor = sqlCon.cursor()
          cursor.execute(query)
          print("data updated")
+         sqlCon.commit()
     
     def readdb(self,sqlCon,query):
          cursor = sqlCon.cursor()
          cursor.execute(query)
          updatedRow = cursor.fetchall()
+         data = []
          for column in updatedRow:
-            print(column)   
+            data.append(column)
+         ic(data)
+         return data
+           
 
     def close(self):
             self.connection.close()
