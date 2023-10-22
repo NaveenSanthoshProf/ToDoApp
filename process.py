@@ -27,5 +27,7 @@ class DailyTasks():
 
     def updateTasks(self,sqlCon,taskname):
         today = date.today()
-        query = f"UPDATE DailyTasks set iscomplete = 1 and validto = {today} WHERE taskname = {functools.reduce(operator.add,taskname)}"
+        taskname_str = ', '.join([f"'{value[0]}'" for value in taskname])
+        query = f"UPDATE DailyTasks set iscompleted = 1 , validto = '{today}' WHERE taskname IN({taskname_str});"
+        print(query)
         MySQLConnector.modifydb(self,sqlCon,query)

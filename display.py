@@ -214,10 +214,10 @@ class ApplicationUI(customtkinter.CTk):
         self.addtask_frame.destroy()
 
     def refreshdata(self,sqlCon):
-        dict = {}
+        dict = []
         for i in self.checkboxes:
-            if i.get() == 1 :
-                DailyTasks.updateTasks(self,sqlCon,i.cget("text"))
+            dict.append(i.cget("text"))
+        DailyTasks.updateTasks(self,sqlCon,dict)
 
 
             #completed.append( self.checkbox_1.get())
