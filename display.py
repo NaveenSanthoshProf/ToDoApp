@@ -1,7 +1,7 @@
 import customtkinter
 import tkinter
 from icecream import ic
-
+from datetime import date
 from process import DailyTasks
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -25,7 +25,7 @@ class ApplicationUI(customtkinter.CTk):
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=75, pady=(20, 10))
 
-        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame,text="Daily Tasks" , command=lambda: self.dailytask(sqlCon))
+        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame,text="Daily Tasks" , command=lambda: (self.dailytask(sqlCon),self.updatetask(sqlCon)))
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
         self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame,text="Work ToDo" , command=lambda: self.WorkTodo())
         self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
@@ -220,5 +220,10 @@ class ApplicationUI(customtkinter.CTk):
         DailyTasks.updateTasks(self,sqlCon,dict)
 
 
+    def updatetask(self,sqlCon):
+        today = date.today()    
+        distinct_tasks = DailyTasks.getDistinctTasks(self,sqlCon)
+        ic(distinct_tasks)
+
             #completed.append( self.checkbox_1.get())
-        #ic(completed)
+        #ic(completed) 

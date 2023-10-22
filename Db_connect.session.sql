@@ -1,1 +1,1 @@
-SELECT * FROM DailyTasks
+SELECT * FROM DailyTasks;
