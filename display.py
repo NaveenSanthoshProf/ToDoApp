@@ -25,7 +25,9 @@ class ApplicationUI(customtkinter.CTk):
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=75, pady=(20, 10))
 
-        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame,text="Daily Tasks" , command=lambda: (self.dailytask(sqlCon),self.updatetask(sqlCon)))
+        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame,text="Daily Tasks" , command=lambda: (self.dailytask(sqlCon),
+                                                                                                                 self.update(sqlCon)
+                                                                                                                 ))
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
         self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame,text="Work ToDo" , command=lambda: self.WorkTodo())
         self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
@@ -45,14 +47,7 @@ class ApplicationUI(customtkinter.CTk):
         self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
 
 
-        
-
-
-       
         self.mainloop()
-
-    def buttonFn (self):
-        ic("Button clicked")
 
     def change_scaling_event(self, new_scaling: str):
         new_scaling_float = int(new_scaling.replace("%", "")) / 100
@@ -85,7 +80,7 @@ class ApplicationUI(customtkinter.CTk):
             self.habittrack_frame.destroy()
             self.sidehustle_frame.destroy()
         except:
-            ic("Log?")
+            pass
 
     def journal(self):
         self.journal_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
@@ -100,7 +95,7 @@ class ApplicationUI(customtkinter.CTk):
             self.habittrack_frame.destroy()
             self.sidehustle_frame.destroy()
         except:
-            ic("Log?")
+            pass
     
     def WorkTodo(self):
         self.WorkTodo_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
@@ -121,7 +116,7 @@ class ApplicationUI(customtkinter.CTk):
             self.habittrack_frame.destroy()
             self.sidehustle_frame.destroy()
         except:
-            ic("Log?")        
+            pass
 
     def weeklyplan(self):
         self.weeklyplan_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
@@ -134,7 +129,7 @@ class ApplicationUI(customtkinter.CTk):
             self.habittrack_frame.destroy()
             self.sidehustle_frame.destroy()
         except:
-            ic("Log?")        
+            pass       
 
     def habittrack(self):
         self.habittrack_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
@@ -165,7 +160,7 @@ class ApplicationUI(customtkinter.CTk):
             self.weeklyplan_frame.destroy()
             self.sidehustle_frame.destroy()
         except:
-            ic("Log?")        
+            pass        
 
     def sidehustle(self):
         self.sidehustle_frame = customtkinter.CTkFrame(self, width=700, corner_radius=0)
@@ -179,7 +174,7 @@ class ApplicationUI(customtkinter.CTk):
             self.weeklyplan_frame.destroy()
             self.habittrack_frame.destroy()
         except:
-            ic("Log?")        
+            pass       
         
 
     def addTaskwindow(self,sqlCon):
@@ -198,13 +193,10 @@ class ApplicationUI(customtkinter.CTk):
 
         self.addtask_button_1 = customtkinter.CTkButton(self.addtask_frame,text="Update" , command=lambda:(self.adddata(sqlCon),self.dailytask(sqlCon)))
         self.addtask_button_1.grid(row=1, column=5, padx=20, pady=10)
-        
-
-
         try: 
             self.dailytask_frame.destroy()
         except:
-            ic("log?")
+            pass
 
     def adddata(self,sqlCon):
         quantity = self.entry_quantity.get()
@@ -216,14 +208,16 @@ class ApplicationUI(customtkinter.CTk):
     def refreshdata(self,sqlCon):
         dict = []
         for i in self.checkboxes:
-            dict.append(i.cget("text"))
+            if i.get() == 1:
+                dict.append(i.cget("text"))
+            else: 
+                pass
         DailyTasks.updateTasks(self,sqlCon,dict)
+        self.dailytask(sqlCon)
 
-
-    def updatetask(self,sqlCon):
+    def update(self,sqlCon):
         today = date.today()    
         distinct_tasks = DailyTasks.getDistinctTasks(self,sqlCon)
-        ic(distinct_tasks)
-
-            #completed.append( self.checkbox_1.get())
+        #ic(distinct_tasks)
+        #completed.append( self.checkbox_1.get())
         #ic(completed) 

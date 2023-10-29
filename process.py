@@ -3,6 +3,8 @@ from datetime import date
 from icecream import ic
 import functools
 import operator
+import pandas as pd
+
 
 class DailyTasks():
     def __init__(self):
@@ -34,6 +36,7 @@ class DailyTasks():
         MySQLConnector.modifydb(self,sqlCon,query)
 
     def getDistinctTasks(self,sqlCon):
+        ##to debug  updates db twice 
         todayDate =date.today()
         latestDateQuery = f"SELECT max(validfrom) FROM DailyTasks;" 
         latestDate = MySQLConnector.readdb(self,sqlCon,latestDateQuery)
@@ -42,26 +45,14 @@ class DailyTasks():
             pass
         else:
             latest_str = latestDate[0][0].strftime("%Y-%m-%d")
-            distinctTaskQuery = f"SELECT Distinct taskname FROM DailyTasks WHERE isdaily = 1;"
+            distinctTaskQuery = f"SELECT * FROM DailyTasks WHERE isdaily = 1 and validfrom = '{latestDate[0][0]}';"
             distinctTasks = MySQLConnector.readdb(self,sqlCon,distinctTaskQuery)
-            quantityTasksQuery = f"SELECT Distinct quantity FROM DailyTasks ;"
-            quantityTasks = MySQLConnector.readdb(self,sqlCon,quantityTasksQuery)
-            distinctTasksLists = []
-            quantitytasksLists = []
-            validfromLists=[]
-            validtoLists=[]
-            isdailyLists=[]
-            iscompletedLists=[]
-            for i in range(len(distinctTasks)):
-                distinctTasksLists.append(distinctTasks[i][0])
-                quantitytasksLists.append(quantityTasks[i][0])
-                validfromLists.append(date.today())
-                validtoLists.append('2999-01-01')
-                isdailyLists.append('1')
-                iscompletedLists.append('0')
-            data = list(zip(distinctTasksLists,quantitytasksLists,validfromLists,validtoLists,isdailyLists,iscompletedLists))
-
-            distinctTasksUpdateQuery = f"INSERT INTO DailyTasks (taskname, quantity, validfrom, validto, isdaily, iscompleted) VALUES (%s,%s,%s,%s,%s,%s);"
-            MySQLConnector.modifymanydb(self,sqlCon,distinctTasksUpdateQuery,data)
-
+            Validfrom = todayDate.strftime("%Y-%m-%d")
+            Validto='2099-01-01'
+            isdaily = '1'
+            iscomplete = '0'
+            for i in (distinctTasks):
+                distinctTasksUpdateQuery = f"INSERT INTO DailyTasks (taskname, quantity, validfrom, validto, isdaily, iscompleted) VALUES ('{i[1]}','{i[2]}','{Validfrom}','{Validto}','{isdaily}','{iscomplete}');"
+                MySQLConnector.modifydb(self,sqlCon,distinctTasksUpdateQuery)
+                
         return
